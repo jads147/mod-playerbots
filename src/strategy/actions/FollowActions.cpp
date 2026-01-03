@@ -23,7 +23,38 @@ bool FollowAction::Execute(Event event)
     bool moved = false;
     if (!target.empty())
     {
-        moved = Follow(AI_VALUE(Unit*, target));
+        // Relaxed follow: stay in radius, don't adjust angle/formation
+        if (botAI->HasStrategy("relaxed follow", BOT_STATE_NON_COMBAT))
+        {
+            Unit* followTarget = AI_VALUE(Unit*, target);
+            if (!followTarget)
+                return false;
+
+            // Only move if bot is too far away from target
+            float distance = sServerFacade->GetDistance2d(bot, followTarget);
+            float maxDistance = formation->GetMaxDistance();
+
+            if (distance > maxDistance)
+            {
+                // Calculate position at relaxedFollowDistance from master
+                // Move towards master but stop at configured distance
+                float keepDistance = sPlayerbotAIConfig->relaxedFollowDistance;
+                float angle = followTarget->GetAngle(bot); // Angle from master to bot
+                float targetX = followTarget->GetPositionX() + cos(angle) * keepDistance;
+                float targetY = followTarget->GetPositionY() + sin(angle) * keepDistance;
+                float targetZ = followTarget->GetPositionZ();
+
+                moved = MoveTo(followTarget->GetMapId(),
+                              targetX, targetY, targetZ,
+                              false, false, false, true,
+                              botAI->GetState() == BOT_STATE_COMBAT ? MovementPriority::MOVEMENT_COMBAT : MovementPriority::MOVEMENT_NORMAL,
+                              true);
+            }
+        }
+        else
+        {
+            moved = Follow(AI_VALUE(Unit*, target));
+        }
     }
     else
     {

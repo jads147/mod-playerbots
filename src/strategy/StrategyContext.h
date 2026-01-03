@@ -39,6 +39,7 @@
 #include "RTSCStrategy.h"
 #include "RacialsStrategy.h"
 #include "RangedCombatStrategy.h"
+#include "RelaxedFollowStrategy.h"
 #include "ReturnStrategy.h"
 #include "RpgStrategy.h"
 #include "RunawayStrategy.h"
@@ -122,6 +123,7 @@ public:
         creators["worldbuff"] = &StrategyContext::world_buff;
         creators["use bobber"] = &StrategyContext::bobber_strategy;
         creators["master fishing"] = &StrategyContext::master_fishing;
+        creators["relaxed follow"] = &StrategyContext::relaxed_follow;
     }
 
 private:
@@ -192,6 +194,7 @@ private:
     static Strategy* world_buff(PlayerbotAI* botAI) { return new WorldBuffStrategy(botAI); }
     static Strategy* bobber_strategy(PlayerbotAI* botAI) { return new UseBobberStrategy(botAI); }
     static Strategy* master_fishing(PlayerbotAI* botAI) { return new MasterFishingStrategy(botAI); }
+    static Strategy* relaxed_follow(PlayerbotAI* botAI) { return new RelaxedFollowStrategy(botAI); }
 };
 
 class MovementStrategyContext : public NamedObjectContext<Strategy>

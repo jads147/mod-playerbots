@@ -370,6 +370,9 @@ AiPlayerbot.AggroDistance = 22
 AiPlayerbot.TooCloseDistance = 5.0
 AiPlayerbot.MeleeDistance = 0.75
 AiPlayerbot.FollowDistance = 1.5
+# Distance to maintain when using "relaxed follow" strategy
+# Bots move to this distance from master when they get too far
+AiPlayerbot.RelaxedFollowDistance = 1.0
 AiPlayerbot.WhisperDistance = 6000.0
 AiPlayerbot.ContactDistance = 0.45
 AiPlayerbot.AoeRadius = 10
